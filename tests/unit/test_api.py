@@ -624,7 +624,7 @@ def is_form_data_file_testable() -> bool:
     is_testable = flask_version < threshold_version and werkzeus_version < threshold_version
     if is_testable is False:
         logger.warn(
-            "sending file in form data is not testable because of flask, werkzeus versions."
+            "sending file in form data is not testable because of Flask, Werkzeug versions."
             f"Expected < {threshold_version}, but {flask_version=} and {werkzeus_version}."
         )
     return is_testable
