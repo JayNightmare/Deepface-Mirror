@@ -333,7 +333,7 @@ def search_identity(
         target_img = cv2.imread(target_path)
 
     # resize anyway
-    target_img = cv2.resize(target_img, (IDENTIFIED_IMG_SIZE, IDENTIFIED_IMG_SIZE))
+    target_img = cv2.resize(target_img, (IDENTIFIED_IMG_SIZE, IDENTIFIED_IMG_SIZE)) # type: ignore[union-attr]
 
     return (
         target_path.split("/")[-1],
@@ -936,7 +936,7 @@ def overlay_emotion(
 
         if x + w + IDENTIFIED_IMG_SIZE < img.shape[1]:
 
-            text_location_y = y + 20 + (index + 1) * 20
+            text_location_y = y + 20 + (index + 1) * 20  # type: ignore[union-attr]
             text_location_x = x + w
 
             if text_location_y < y + h:
@@ -952,10 +952,10 @@ def overlay_emotion(
 
                 cv2.rectangle(
                     img,
-                    (x + w + 70, y + 13 + (index + 1) * 20),
+                    (x + w + 70, y + 13 + (index + 1) * 20),  # type: ignore[union-attr]
                     (
                         x + w + 70 + bar_x,
-                        y + 13 + (index + 1) * 20 + 5,
+                        y + 13 + (index + 1) * 20 + 5, # type: ignore[union-attr]
                     ),
                     (255, 255, 255),
                     cv2.FILLED,
@@ -963,7 +963,7 @@ def overlay_emotion(
 
         elif x - IDENTIFIED_IMG_SIZE > 0:
 
-            text_location_y = y + 20 + (index + 1) * 20
+            text_location_y = y + 20 + (index + 1) * 20 # type: ignore[union-attr]
             text_location_x = x - IDENTIFIED_IMG_SIZE
 
             if text_location_y <= y + h:
@@ -981,11 +981,11 @@ def overlay_emotion(
                     img,
                     (
                         x - IDENTIFIED_IMG_SIZE + 70,
-                        y + 13 + (index + 1) * 20,
+                        y + 13 + (index + 1) * 20, # type: ignore[union-attr]
                     ),
                     (
                         x - IDENTIFIED_IMG_SIZE + 70 + bar_x,
-                        y + 13 + (index + 1) * 20 + 5,
+                        y + 13 + (index + 1) * 20 + 5, # type: ignore[union-attr]
                     ),
                     (255, 255, 255),
                     cv2.FILLED,
