@@ -603,7 +603,10 @@ def is_form_data_file_testable() -> bool:
     Returns:
         is_form_data_file_testable (bool)
     """
-    from importlib.metadata import version as get_version, PackageNotFoundError
+    try:
+        from importlib.metadata import version as get_version, PackageNotFoundError
+    except ImportError:  # Python < 3.8
+        from importlib_metadata import version as get_version, PackageNotFoundError
 
     flask_version = version.parse(flask.__version__)
     try:
