@@ -609,18 +609,21 @@ def is_form_data_file_testable() -> bool:
         from importlib_metadata import version as get_version, PackageNotFoundError
 
     flask_version = version.parse(flask.__version__)
+    threshold_version = version.parse("2.3.0")
     try:
         werkzeug_version_str = get_version("werkzeug")
     except PackageNotFoundError:
-        werkzeug_version_str = "unknown"
+        # If werkzeug version is unknown, assume it's compatible and
+        # base testability only on the Flask version.
+        is_testable = flask_version < threshold_version
+        if is_testable is False:
+            logger.warn(
+                "sending file in form data is not testable because werkzeug version is unknown "
+                f"and Flask version is {flask_version} (expected < {threshold_version})."
+            )
+        return is_testable
 
-    # If werkzeug version is unknown, assume it's compatible
-    if werkzeug_version_str == "unknown":
-        werkzeus_version = version.parse("2.2.3")
-    else:
-        werkzeus_version = version.parse(werkzeug_version_str)
-
-    threshold_version = version.parse("2.3.0")
+    werkzeus_version = version.parse(werkzeug_version_str)
     is_testable = flask_version < threshold_version and werkzeus_version < threshold_version
     if is_testable is False:
         logger.warn(
