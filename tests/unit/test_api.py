@@ -4,8 +4,10 @@ import os
 import shutil
 import unittest
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory, gettempdir
 from unittest.mock import MagicMock, patch
+
+TMP_DIR = gettempdir()
 
 # 3rd party dependencies
 import flask
@@ -293,7 +295,7 @@ class TestApiFunctions(unittest.TestCase):
         if is_form_data_file_testable() is False:
             return
 
-        with open("/tmp/img1.jpg", "rb") as img_file:
+        with open(os.path.join(TMP_DIR, "img1.jpg"), "rb") as img_file:
             response = self.app.post(
                 "/analyze",
                 content_type="multipart/form-data",
@@ -314,8 +316,8 @@ class TestApiFunctions(unittest.TestCase):
         if is_form_data_file_testable() is False:
             return
 
-        with open("/tmp/img1.jpg", "rb") as img1_file:
-            with open("/tmp/img2.jpg", "rb") as img2_file:
+        with open(os.path.join(TMP_DIR, "img1.jpg"), "rb") as img1_file:
+            with open(os.path.join(TMP_DIR, "img2.jpg"), "rb") as img2_file:
                 response = self.app.post(
                     "/verify",
                     content_type="multipart/form-data",
@@ -343,7 +345,7 @@ class TestApiFunctions(unittest.TestCase):
         if is_form_data_file_testable() is False:
             return
 
-        with open("/tmp/img1.jpg", "rb") as img_file:
+        with open(os.path.join(TMP_DIR, "img1.jpg"), "rb") as img_file:
             response = self.app.post(
                 "/represent",
                 content_type="multipart/form-data",
@@ -366,7 +368,7 @@ class TestApiFunctions(unittest.TestCase):
             "/represent",
             content_type="multipart/form-data",
             data={
-                "img": "/tmp/img1.jpg",
+                "img": os.path.join(TMP_DIR, "img1.jpg"),
                 "model_name": "Facenet",
                 "detector_backend": "mtcnn",
             },
@@ -586,7 +588,7 @@ class TestConnectionStringSucceddedValidation(unittest.TestCase):
 
 def download_test_images(url: str):
     file_name = url.split("/")[-1]
-    target_file = f"/tmp/{file_name}"
+    target_file = os.path.join(TMP_DIR, file_name)
     if os.path.exists(target_file) is True:
         return
 

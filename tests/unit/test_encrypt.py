@@ -1,6 +1,7 @@
 # built-in dependencies
 import uuid
-
+import tempfile
+from pathlib import Path
 
 # 3rd party dependencies
 import pytest
@@ -12,10 +13,13 @@ from lightphe.models.Tensor import EncryptedTensor
 from deepface import DeepFace
 from deepface.config.threshold import thresholds
 
+TEMP_DIR = Path(tempfile.gettempdir())
 experiment_id = uuid.uuid4()
+SECRET_KEY_PATH = TEMP_DIR / f"{experiment_id}_secret.txt"
+PUBLIC_KEY_PATH = TEMP_DIR / f"{experiment_id}_public.txt"
 cs = LightPHE(algorithm_name="Paillier", precision=19)
-cs.export_keys(f"/tmp/{experiment_id}_secret.txt")
-cs.export_keys(f"/tmp/{experiment_id}_public.txt", public=True)
+cs.export_keys(SECRET_KEY_PATH)
+cs.export_keys(PUBLIC_KEY_PATH, public=True)
 
 
 def test_no_encrypt():
@@ -176,7 +180,7 @@ def test_encrypt_batch_skip_case():
 def test_homomorphic_encryption():
     # this only has public key
     cloud_cs = LightPHE(
-        algorithm_name="Paillier", precision=19, key_file=f"/tmp/{experiment_id}_public.txt"
+        algorithm_name="Paillier", precision=19, key_file=str(PUBLIC_KEY_PATH)
     )
 
     encrypted_embedding = DeepFace.represent(
@@ -201,7 +205,7 @@ def test_homomorphic_encryption():
 
     # on-prem system has private key
     onprem_cs = LightPHE(
-        algorithm_name="Paillier", precision=19, key_file=f"/tmp/{experiment_id}_secret.txt"
+        algorithm_name="Paillier", precision=19, key_file=str(SECRET_KEY_PATH)
     )
 
     # on-prem system can decrypt the result

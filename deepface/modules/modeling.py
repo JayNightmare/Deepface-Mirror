@@ -116,7 +116,7 @@ def build_model(task: str, model_name: str) -> Any:
     if task not in AVAILABLE_MODELS.keys():
         raise UnimplementedError(f"unimplemented task - {task}")
 
-    if "cached_models" not in globals():
+    if not cached_models:
         cached_models = {current_task: {} for current_task in AVAILABLE_MODELS.keys()}
 
     if cached_models[task].get(model_name) is None:
