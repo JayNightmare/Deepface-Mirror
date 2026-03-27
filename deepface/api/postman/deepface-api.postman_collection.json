@@ -1,0 +1,355 @@
+{
+	"info": {
+		"_postman_id": "26c5ee53-1f4b-41db-9342-3617c90059d3",
+		"name": "deepface-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Represent - form data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "img",
+							"type": "file",
+							"src": "/Users/sefik/Desktop/deepface/tests/dataset/img1.jpg"
+						},
+						{
+							"key": "model_name",
+							"value": "Facenet",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5005/represent",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"represent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Represent - default",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"model_name\": \"Facenet\",\n  \"detector_backend\": \"mtcnn\",\n  \"img\": \"https://raw.githubusercontent.com/serengil/deepface/refs/heads/master/tests/unit/dataset/img1.jpg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5005/represent",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"represent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Face verification - default",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\n  \t\"img1\": \"https://raw.githubusercontent.com/serengil/deepface/refs/heads/master/tests/unit/dataset/img1.jpg\",\n    \"img2\": \"https://raw.githubusercontent.com/serengil/deepface/refs/heads/master/tests/unit/dataset/img3.jpg\",\n    \"model_name\": \"Facenet\",\n    \"detector_backend\": \"opencv\",\n    \"distance_metric\": \"euclidean\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5005/verify",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Face verification - form data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "img1",
+							"type": "file",
+							"src": "/Users/sefik/Desktop/deepface/tests/dataset/img1.jpg"
+						},
+						{
+							"key": "img2",
+							"type": "file",
+							"src": "/Users/sefik/Desktop/deepface/tests/dataset/img2.jpg"
+						},
+						{
+							"key": "model_name",
+							"value": "Facenet",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5005/verify",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Face analysis - default",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"__img\": \"/Users/sefik/Desktop/deepface/tests/dataset/img2.jpg\",\n    \"img\": \"https://raw.githubusercontent.com/serengil/deepface/refs/heads/master/tests/unit/dataset/img2.jpg\",\n    \"__actions\": [\"age\", \"gender\", \"emotion\", \"race\"],\n    \"actions\": [\"age\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5005/analyze",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"analyze"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Face analysis - form data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "img",
+							"type": "file",
+							"src": "/Users/sefik/Desktop/deepface/tests/dataset/img1.jpg"
+						},
+						{
+							"key": "actions",
+							"value": "\"[age, gender]\"",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5005/analyze",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"analyze"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register - default",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"model_name\": \"Facenet\",\n  \"detector_backend\": \"mtcnn\",\n  \"align\": true,\n  \"l2_normalize\": true,\n  \"img\": \"https://raw.githubusercontent.com/serengil/deepface/refs/heads/master/tests/unit/dataset/img18.jpg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5005/register",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search by exact - default",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"img\": \"https://raw.githubusercontent.com/serengil/deepface/refs/heads/master/tests/unit/dataset/img1.jpg\",\n  \"model_name\": \"Facenet\",\n  \"detector_backend\": \"mtcnn\",\n  \"align\": true,\n  \"l2_normalize\": true,\n  \"distance_metric\": \"cosine\",\n  \"search_method\": \"exact\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5005/search",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search by ann - default",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"img\": \"https://raw.githubusercontent.com/serengil/deepface/refs/heads/master/tests/unit/dataset/img1.jpg\",\n  \"model_name\": \"Facenet\",\n  \"detector_backend\": \"mtcnn\",\n  \"align\": true,\n  \"l2_normalize\": true,\n  \"search_method\": \"ann\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5005/search",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Build index",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"model_name\": \"Facenet\",\n  \"detector_backend\": \"mtcnn\",\n  \"align\": true,\n  \"l2_normalize\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5005/build/index",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"build",
+						"index"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
