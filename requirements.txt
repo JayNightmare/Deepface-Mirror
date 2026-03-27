@@ -16,3 +16,4 @@ gunicorn>=25.3.0
 lightphe>=0.0.21
 lightdsa>=0.0.3
 python-dotenv>=1.2.2
+pylint>=4.0.5
