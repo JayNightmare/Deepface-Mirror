@@ -60,6 +60,7 @@ jobs:
           pip install .
       - name: Type checking with MyPy
         run: |
+          pip install types-Flask types-Werkzeug
           mypy deepface/
   unit-tests:
     needs: type-check
