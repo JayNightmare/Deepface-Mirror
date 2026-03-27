@@ -44,7 +44,7 @@ else:
     )
 
 WEIGHTS_URL = (
-    "https://github.com/serengil/deepface_models/releases/download/v1.0/arcface_weights.h5"
+    "https://github.com/JayNightmare/Deepface-Mirror_models/releases/download/v1.0/arcface_weights.h5"
 )
 
 

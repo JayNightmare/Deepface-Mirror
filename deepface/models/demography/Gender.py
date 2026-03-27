@@ -27,7 +27,7 @@ else:
     from tensorflow.keras.layers import Convolution2D, Flatten, Activation
 
 WEIGHTS_URL = (
-    "https://github.com/serengil/deepface_models/releases/download/v1.0/gender_model_weights.h5"
+    "https://github.com/JayNightmare/Deepface-Mirror_models/releases/download/v1.0/gender_model_weights.h5"
 )
 
 # Labels for the genders that can be detected by the model.

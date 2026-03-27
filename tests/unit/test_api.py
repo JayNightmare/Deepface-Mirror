@@ -24,8 +24,8 @@ from deepface.modules import detection
 
 logger = Logger()
 
-IMG1_SOURCE = "https://raw.githubusercontent.com/serengil/deepface/refs/heads/master/tests/unit/dataset/img1.jpg"
-IMG2_SOURCE = "https://raw.githubusercontent.com/serengil/deepface/refs/heads/master/tests/unit/dataset/img2.jpg"
+IMG1_SOURCE = "https://raw.githubusercontent.com/JayNightmare/Deepface-Mirror/refs/heads/main/tests/unit/dataset/img1.jpg"
+IMG2_SOURCE = "https://raw.githubusercontent.com/JayNightmare/Deepface-Mirror/refs/heads/main/tests/unit/dataset/img2.jpg"
 DUMMY_APP = Flask(__name__)
 
 
@@ -139,7 +139,7 @@ class TestApiFunctions(unittest.TestCase):
         data = {
             "model_name": "Facenet",
             "detector_backend": "mtcnn",
-            "img": "https://github.com/serengil/deepface/blob/master/tests/unit/dataset/couple.jpg?raw=true",
+            "img": "https://github.com/JayNightmare/Deepface-Mirror/blob/main/tests/unit/dataset/couple.jpg?raw=true",
         }
 
         response = self.app.post("/represent", json=data)
@@ -190,7 +190,7 @@ class TestApiFunctions(unittest.TestCase):
             # image path
             image_path,
             # image url
-            f"https://github.com/serengil/deepface/blob/master/tests/unit/{image_path}?raw=true",
+            f"https://github.com/JayNightmare/Deepface-Mirror/blob/main/tests/unit/{image_path}?raw=true",
             # encoded image
             encoded_image,
         ]

@@ -1,6 +1,6 @@
 ## Tickets
 
-Resolves https://github.com/serengil/deepface/issues/XXX
+Resolves https://github.com/JayNightmare/Deepface-Mirror/issues/XXX
 
 ### What has been done
 

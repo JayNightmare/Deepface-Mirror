@@ -23,7 +23,7 @@ else:
     from tensorflow.keras.layers import Convolution2D, Flatten, Activation
 
 WEIGHTS_URL = (
-    "https://github.com/serengil/deepface_models/releases/download/v1.0/race_model_single_batch.h5"
+    "https://github.com/JayNightmare/Deepface-Mirror_models/releases/download/v1.0/race_model_single_batch.h5"
 )
 # Labels for the ethnic phenotypes that can be detected by the model.
 labels = ["asian", "indian", "black", "white", "middle eastern", "latino hispanic"]

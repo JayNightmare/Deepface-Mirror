@@ -42,7 +42,7 @@ class DeepFaceClient(FacialRecognition):
     def __init__(self) -> None:
         # DeepFace requires tf 2.12 or less
         if tf_major == 2 and tf_minor > 12:
-            # Ref: https://github.com/serengil/deepface/pull/1079
+            # Ref: https://github.com/JayNightmare/Deepface-Mirror/pull/1079
             raise ValueError(
                 "DeepFace model requires LocallyConnected2D but it is no longer supported"
                 f" after tf 2.12 but you have {tf_major}.{tf_minor}. You need to downgrade your tf."

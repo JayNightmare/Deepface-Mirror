@@ -25,7 +25,7 @@ else:
 # pylint: disable=unnecessary-lambda
 
 WEIGHTS_URL = (
-    "https://github.com/serengil/deepface_models/releases/download/v1.0/openface_weights.h5"
+    "https://github.com/JayNightmare/Deepface-Mirror_models/releases/download/v1.0/openface_weights.h5"
 )
 
 # ---------------------------------------

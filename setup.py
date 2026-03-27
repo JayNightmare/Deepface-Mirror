@@ -22,7 +22,7 @@ setuptools.setup(
     data_files=[("", ["README.md", "requirements.txt", "package_info.json"])],
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/serengil/deepface",
+    url="https://github.com/JayNightmare/Deepface-Mirror",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
