@@ -35,8 +35,9 @@ def list_images(path: str) -> List[str]:
         for file in f:
             if os.path.splitext(file)[1].lower() in IMAGE_EXTS:
                 exact_path = os.path.join(r, file)
-                with Image.open(exact_path) as img:  # lazy
-                    if img.format.lower() in PIL_EXTS:
+                with Image.open(exact_path) as img:
+                    fmt = img.format
+                    if fmt is not None and fmt.lower() in PIL_EXTS:
                         images.append(exact_path)
     return images
 
@@ -54,7 +55,8 @@ def yield_images(path: str) -> Generator[str, None, None]:
             if os.path.splitext(file)[1].lower() in IMAGE_EXTS:
                 exact_path = os.path.join(r, file)
                 with Image.open(exact_path) as img:  # lazy
-                    if img.format.lower() in PIL_EXTS:
+                    fmt = img.format
+                    if fmt is not None and fmt.lower() in PIL_EXTS:
                         yield exact_path
 
 
@@ -180,7 +182,10 @@ def load_image_from_base64(uri: str) -> NDArray[Any]:
     # similar to find functionality, we are just considering these extensions
     # content type is safer option than file extension
     with Image.open(io.BytesIO(decoded_bytes)) as img:
-        file_type = img.format.lower()
+        fmt = img.format
+        if fmt is None:
+            raise ValueError("Unable to determine the image format from base64 data")
+        file_type = fmt.lower()
         if file_type not in {"jpeg", "png"}:
             raise DataTypeError(f"Input image can be jpg or png, but it is {file_type}")
 

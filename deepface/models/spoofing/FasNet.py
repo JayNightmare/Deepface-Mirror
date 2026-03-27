@@ -116,34 +116,24 @@ class Fasnet:
         first_img = crop(img, (x, y, w, h), 2.7, 80, 80)
         second_img = crop(img, (x, y, w, h), 4, 80, 80)
 
-        test_transform = Compose(
-            [
-                ToTensor(),
-            ]
-        )
+        test_transform = Compose([ToTensor()])
 
-        first_img = test_transform(first_img)
-        first_img = first_img.unsqueeze(0).to(self.device)
+        # Cast to Any to satisfy Mypy since Compose output is dynamic
+        t_first: Any = test_transform(first_img)
+        t_second: Any = test_transform(second_img)
 
-        second_img = test_transform(second_img)
-        second_img = second_img.unsqueeze(0).to(self.device)
+        t_first = t_first.unsqueeze(0).to(self.device)
+        t_second = t_second.unsqueeze(0).to(self.device)
 
         with torch.no_grad():
-            first_result = self.first_model.forward(first_img)
-            first_result = F.softmax(first_result).cpu().numpy()
+            first_result = F.softmax(self.first_model.forward(t_first), dim=1).cpu().numpy()
+            second_result = F.softmax(self.second_model.forward(t_second), dim=1).cpu().numpy()
 
-            second_result = self.second_model.forward(second_img)
-            second_result = F.softmax(second_result).cpu().numpy()
-
-        prediction = np.zeros((1, 3))
-        prediction += first_result
-        prediction += second_result
-
+        prediction = first_result + second_result
         label = np.argmax(prediction)
-        is_real = (
-            True if label == 1 else False
-        )  # pylint: disable=simplifiable-if-expression
-        score = prediction[0][label] / 2
+        
+        is_real = bool(label == 1)
+        score = float(prediction[0][label] / 2)
 
         return is_real, score
 

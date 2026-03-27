@@ -74,8 +74,8 @@ class YuNetClient(Detector):
         # FaceDetector.detect_faces does not support score_threshold parameter.
         # We can set it via environment variable.
         score_threshold = float(os.environ.get("yunet_score_threshold", "0.9"))
-        resp = []
-        faces = []
+        resp = [] # type: List[FacialAreaRegion]
+        faces = [] # type: List[List[float]]
         height, width = img.shape[0], img.shape[1]
         # resize image if it is too large (Yunet fails to detect faces on large input sometimes)
         # I picked 640 as a threshold because it is the default value of max_size in Yunet.

@@ -1,5 +1,5 @@
 # built-in dependencies
-from typing import Tuple, Any
+from typing import Tuple, Any, cast
 
 # 3rd party
 import numpy as np

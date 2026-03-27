@@ -37,8 +37,6 @@ if TYPE_CHECKING:
     from deepface.models.Detector import Detector
     from deepface.models.FacialRecognition import FacialRecognition
 
-    cached_models: Dict[str, Dict[str, Any]] = {}
-
 cached_models: Dict[str, Dict[str, Any]] = {}
 
 class AvailableModels(TypedDict):
