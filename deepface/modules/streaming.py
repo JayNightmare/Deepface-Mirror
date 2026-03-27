@@ -333,7 +333,7 @@ def search_identity(
         target_img = cv2.imread(target_path)
 
     # resize anyway
-    target_img = cv2.resize(target_img, (IDENTIFIED_IMG_SIZE, IDENTIFIED_IMG_SIZE)) # type: ignore[union-attr]
+    target_img = cv2.resize(target_img, (IDENTIFIED_IMG_SIZE, IDENTIFIED_IMG_SIZE)) # type: ignore
 
     return (
         target_path.split("/")[-1],
