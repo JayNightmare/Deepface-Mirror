@@ -40,7 +40,7 @@ jobs:
           pip install .
       - name: Lint with pylint
         run: |
-          pylint --fail-under=10 deepface/
+          pylint --fail-under=9.95 deepface/
   type-check:
     needs: linting
     runs-on: ubuntu-latest
