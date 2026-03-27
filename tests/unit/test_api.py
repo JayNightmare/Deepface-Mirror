@@ -599,7 +599,7 @@ def is_form_data_file_testable() -> bool:
     """
     Sending a file from form data fails in unit test with
         415 unsupported media type error for flask 3.X
-        but it is working for flask 2.0.2
+        but it is working for flask 2.2.5
     Returns:
         is_form_data_file_testable (bool)
     """
@@ -613,16 +613,16 @@ def is_form_data_file_testable() -> bool:
 
     # If werkzeug version is unknown, assume it's compatible
     if werkzeug_version_str == "unknown":
-        werkzeus_version = version.parse("2.0.2")
+        werkzeus_version = version.parse("2.2.3")
     else:
         werkzeus_version = version.parse(werkzeug_version_str)
 
-    threshold_version = version.parse("2.0.2")
-    is_testable = flask_version <= threshold_version and werkzeus_version <= threshold_version
+    threshold_version = version.parse("2.3.0")
+    is_testable = flask_version < threshold_version and werkzeus_version < threshold_version
     if is_testable is False:
         logger.warn(
             "sending file in form data is not testable because of flask, werkzeus versions."
-            f"Expected <= {threshold_version}, but {flask_version=} and {werkzeus_version}."
+            f"Expected < {threshold_version}, but {flask_version=} and {werkzeus_version}."
         )
     return is_testable
 
