@@ -38,7 +38,9 @@ class Neo4jClient(Database):
         if connection is not None:
             self.conn = connection
         else:
-            self.conn_details = connection_details or os.environ.get("DEEPFACE_NEO4J_URI")
+            self.conn_details = connection_details or os.environ.get(
+                "DEEPFACE_NEO4J_URI"
+            )
             if not self.conn_details:
                 raise ValueError(
                     "Neo4j connection information not found. "
@@ -49,7 +51,9 @@ class Neo4jClient(Database):
             if isinstance(self.conn_details, str):
                 parsed = urlparse(self.conn_details)
                 uri = f"{parsed.scheme}://{parsed.hostname}:{parsed.port}"
-                self.conn = self.GraphDatabase.driver(uri, auth=(parsed.username, parsed.password))
+                self.conn = self.GraphDatabase.driver(
+                    uri, auth=(parsed.username, parsed.password)
+                )
             else:
                 raise ValueError("connection_details must be a string.")
 
@@ -116,7 +120,9 @@ class Neo4jClient(Database):
         _SCHEMA_CHECKED[node_label] = True
         logger.debug(f"Neo4j index {node_label} ensured.")
 
-    def insert_embeddings(self, embeddings: List[Dict[str, Any]], batch_size: int = 100) -> int:
+    def insert_embeddings(
+        self, embeddings: List[Dict[str, Any]], batch_size: int = 100
+    ) -> int:
         """
         Insert embeddings into Neo4j database in batches.
         """
@@ -159,7 +165,9 @@ class Neo4jClient(Database):
                 for e in batch:
                     face_json = json.dumps(e["face"].tolist())
                     face_hash = hashlib.sha256(face_json.encode()).hexdigest()
-                    embedding_bytes = struct.pack(f'{len(e["embedding"])}d', *e["embedding"])
+                    embedding_bytes = struct.pack(
+                        f'{len(e["embedding"])}d', *e["embedding"]
+                    )
                     embedding_hash = hashlib.sha256(embedding_bytes).hexdigest()
 
                     rows.append(
@@ -178,7 +186,9 @@ class Neo4jClient(Database):
                     )
 
                 processed = session.execute_write(
-                    lambda tx, q=query, r=rows: int(tx.run(q, rows=r).single()["processed"])
+                    lambda tx, q=query, r=rows: int(
+                        tx.run(q, rows=r).single()["processed"]
+                    )
                 )
                 total += processed
 

@@ -30,7 +30,9 @@ class FastMtCnnClient(Detector):
         """
         resp = []
 
-        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # mtcnn expects RGB but OpenCV read BGR
+        img_rgb = cv2.cvtColor(
+            img, cv2.COLOR_BGR2RGB
+        )  # mtcnn expects RGB but OpenCV read BGR
         img_rgb = img_rgb.astype("uint8")  # Fix facenet-pytorch dtype
         detections = self.model.detect(
             img_rgb, landmarks=True
@@ -86,7 +88,9 @@ class FastMtCnnClient(Detector):
 def xyxy_to_xywh(
     regions: Union[
         List[Union[int, float]],
-        Tuple[Union[int, float], Union[int, float], Union[int, float], Union[int, float]],
+        Tuple[
+            Union[int, float], Union[int, float], Union[int, float], Union[int, float]
+        ],
     ],
 ) -> Tuple[int, int, int, int]:
     """

@@ -37,7 +37,9 @@ class PineconeClient(Database):
         if connection is not None:
             self.client = connection
         else:
-            self.conn_details = connection_details or os.environ.get("DEEPFACE_PINECONE_API_KEY")
+            self.conn_details = connection_details or os.environ.get(
+                "DEEPFACE_PINECONE_API_KEY"
+            )
             if not isinstance(self.conn_details, str):
                 raise ValueError(
                     "Pinecone api key must be provided as a string in connection_details "
@@ -76,9 +78,13 @@ class PineconeClient(Database):
                 region=os.getenv("DEEPFACE_PINECONE_REGION", "us-east-1"),
             ),
         )
-        logger.debug(f"Created Pinecone index '{index_name}' with dimension {dimensions}.")
+        logger.debug(
+            f"Created Pinecone index '{index_name}' with dimension {dimensions}."
+        )
 
-    def insert_embeddings(self, embeddings: List[Dict[str, Any]], batch_size: int = 100) -> int:
+    def insert_embeddings(
+        self, embeddings: List[Dict[str, Any]], batch_size: int = 100
+    ) -> int:
         """
         Insert embeddings into Pinecone database in batches.
         """
@@ -109,7 +115,9 @@ class PineconeClient(Database):
             for e in batch:
                 face_json = json.dumps(e["face"].tolist())
                 face_hash = hashlib.sha256(face_json.encode()).hexdigest()
-                embedding_bytes = struct.pack(f'{len(e["embedding"])}d', *e["embedding"])
+                embedding_bytes = struct.pack(
+                    f'{len(e["embedding"])}d', *e["embedding"]
+                )
                 embedding_hash = hashlib.sha256(embedding_bytes).hexdigest()
 
                 vectors.append(

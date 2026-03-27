@@ -95,12 +95,14 @@ class SsdClient(Detector):
 
         faces = detections[0][0]
         faces = faces[
-            (faces[:, ssd_labels.is_face] == 1) & (faces[:, ssd_labels.confidence] >= 0.90)
+            (faces[:, ssd_labels.is_face] == 1)
+            & (faces[:, ssd_labels.confidence] >= 0.90)
         ]
         margins = [ssd_labels.left, ssd_labels.top, ssd_labels.right, ssd_labels.bottom]
         faces[:, margins] = np.int32(faces[:, margins] * 300)
         faces[:, margins] = np.int32(
-            faces[:, margins] * [aspect_ratio_x, aspect_ratio_y, aspect_ratio_x, aspect_ratio_y]
+            faces[:, margins]
+            * [aspect_ratio_x, aspect_ratio_y, aspect_ratio_x, aspect_ratio_y]
         )
         faces[:, [ssd_labels.right, ssd_labels.bottom]] -= faces[
             :, [ssd_labels.left, ssd_labels.top]

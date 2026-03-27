@@ -13,8 +13,9 @@ from deepface.commons import package_utils
 tf_major_version = package_utils.get_tf_major_version()
 if tf_major_version == 1:
     from keras.preprocessing import image
-elif tf_major_version == 2:
-    from tensorflow.keras.preprocessing import image
+else:
+    # Defaulting to 2+ covers 2.x and potential future versions
+    from tensorflow.keras.preprocessing import image # type: ignore
 
 
 def normalize_input(img: NDArray[Any], normalization: str = "base") -> NDArray[Any]:
@@ -92,14 +93,15 @@ def resize_image(img: NDArray[Any], target_size: Tuple[int, int]) -> NDArray[Any
         int(img.shape[1] * factor),
         int(img.shape[0] * factor),
     )
-    img = cv2.resize(img, dsize)
 
-    diff_0 = target_size[0] - img.shape[0]
-    diff_1 = target_size[1] - img.shape[1]
+    resized_img = cv2.resize(img, dsize)
+
+    diff_0 = target_size[0] - resized_img.shape[0]
+    diff_1 = target_size[1] - resized_img.shape[1]
 
     # Put the base image in the middle of the padded image
-    img = np.pad(
-        img,
+    padded_img = np.pad(
+        resized_img,
         (
             (diff_0 // 2, diff_0 - diff_0 // 2),
             (diff_1 // 2, diff_1 - diff_1 // 2),
@@ -109,14 +111,14 @@ def resize_image(img: NDArray[Any], target_size: Tuple[int, int]) -> NDArray[Any
     )
 
     # double check: if target image is not still the same size with target.
-    if img.shape[0:2] != target_size:
-        img = cv2.resize(img, target_size)
+    if padded_img.shape[0:2] != target_size:
+        padded_img = cv2.resize(padded_img, target_size)
 
     # make it 4-dimensional how ML models expect
-    img = image.img_to_array(img)
-    img = np.expand_dims(img, axis=0)
+    final_array = image.img_to_array(padded_img)
+    final_array = np.expand_dims(final_array, axis=0)
 
-    if img.max() > 1:
-        img = (img.astype(np.float32) / 255.0).astype(np.float32)
+    if final_array.max() > 1:
+        final_array = (final_array.astype(np.float32) / 255.0).astype(np.float32)
 
-    return img
+    return final_array

@@ -32,7 +32,9 @@ logger = Logger()
 
 # pylint: disable=too-many-positional-arguments, no-else-return
 def register(
-    img: Union[str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]],
+    img: Union[
+        str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]
+    ],
     img_name: Optional[str] = None,
     model_name: str = "VGG-Face",
     detector_backend: str = "opencv",
@@ -137,7 +139,9 @@ def register(
 
 
 def search(
-    img: Union[str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]],
+    img: Union[
+        str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]
+    ],
     model_name: str = "VGG-Face",
     detector_backend: str = "opencv",
     distance_metric: str = "cosine",
@@ -387,7 +391,9 @@ def search(
 
             if len(instances) > 0:
                 df = pd.DataFrame(instances)
-                df = df.sort_values(by="distance", ascending=True).reset_index(drop=True)
+                df = df.sort_values(by="distance", ascending=True).reset_index(
+                    drop=True
+                )
                 if k is not None and k > 0:
                     df = df.nsmallest(k, "distance")
                 dfs.append(df)
@@ -423,17 +429,23 @@ def search(
 
             if distance_metric == "cosine":
                 df["distance"] = df.apply(
-                    lambda row: find_cosine_distance(row["embedding"], row["target_embedding"]),
+                    lambda row: find_cosine_distance(
+                        row["embedding"], row["target_embedding"]
+                    ),
                     axis=1,
                 )
             elif distance_metric == "euclidean":
                 df["distance"] = df.apply(
-                    lambda row: find_euclidean_distance(row["embedding"], row["target_embedding"]),
+                    lambda row: find_euclidean_distance(
+                        row["embedding"], row["target_embedding"]
+                    ),
                     axis=1,
                 )
             elif distance_metric == "angular":
                 df["distance"] = df.apply(
-                    lambda row: find_angular_distance(row["embedding"], row["target_embedding"]),
+                    lambda row: find_angular_distance(
+                        row["embedding"], row["target_embedding"]
+                    ),
                     axis=1,
                 )
             elif distance_metric == "euclidean_l2":
@@ -522,13 +534,17 @@ def build_index(
     is_vector_db = database_inventory[database_type]["is_vector_db"]
 
     if is_vector_db is True:
-        logger.info(f"{database_type} manages its own indexes. No need to build index manually.")
+        logger.info(
+            f"{database_type} manages its own indexes. No need to build index manually."
+        )
         return
 
     try:
         import faiss
     except ImportError as e:
-        raise ValueError("faiss is not installed. Please install faiss to use build_index.") from e
+        raise ValueError(
+            "faiss is not installed. Please install faiss to use build_index."
+        ) from e
 
     db_client = __connect_database(
         database_type=database_type,
@@ -546,9 +562,13 @@ def build_index(
     if index is not None:
         indexed_indices = faiss.vector_to_array(index.id_map)
         indexed_embeddings = set(indexed_indices)
-        logger.info(f"Found {len(indexed_embeddings)} embeddings already indexed in the database.")
+        logger.info(
+            f"Found {len(indexed_embeddings)} embeddings already indexed in the database."
+        )
     else:
-        logger.info("No existing index found in the database. A new index will be created.")
+        logger.info(
+            "No existing index found in the database. A new index will be created."
+        )
         indexed_embeddings = set()
 
     tic = time.time()
@@ -579,7 +599,9 @@ def build_index(
         return
 
     ids = [item["id"] for item in unindexed_source_embeddings]
-    vectors = np.array([item["embedding"] for item in unindexed_source_embeddings], dtype="float32")
+    vectors = np.array(
+        [item["embedding"] for item in unindexed_source_embeddings], dtype="float32"
+    )
 
     embedding_dim_size = len(source_embeddings[0]["embedding"])
 
@@ -597,7 +619,8 @@ def build_index(
     logger.info(f"Added {len(vectors)} embeddings to index in {toc - tic:.2f} seconds.")
 
     index_path = os.path.join(
-        tempfile.gettempdir(), f"{model_name}_{detector_backend}_{align}_{l2_normalize}.faiss"
+        tempfile.gettempdir(),
+        f"{model_name}_{detector_backend}_{align}_{l2_normalize}.faiss",
     )
 
     # now create index from scratch, then think how to load an index and add new vectors to it
@@ -626,7 +649,9 @@ def build_index(
 
 
 def __get_embeddings(
-    img: Union[str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]],
+    img: Union[
+        str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]
+    ],
     model_name: str = "VGG-Face",
     detector_backend: str = "opencv",
     enforce_detection: bool = True,

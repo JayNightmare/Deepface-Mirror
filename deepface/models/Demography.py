@@ -49,7 +49,9 @@ class Demography(ABC):
 
         if img_batch.shape[0] == 1:  # Single image
             # Predict with legacy method.
-            return cast(NDArray[Any], self.model(img_batch, training=False).numpy()[0, :])
+            return cast(
+                NDArray[Any], self.model(img_batch, training=False).numpy()[0, :]
+            )
 
         # Batch of images
         # Predict with batch prediction

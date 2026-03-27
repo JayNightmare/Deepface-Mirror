@@ -46,7 +46,9 @@ class MongoDbClient(Database):
         if connection is not None:
             self.client = connection
         else:
-            self.conn_details = connection_details or os.environ.get("DEEPFACE_MONGO_URI")
+            self.conn_details = connection_details or os.environ.get(
+                "DEEPFACE_MONGO_URI"
+            )
             if not self.conn_details:
                 raise ValueError(
                     "MongoDB connection information not found. "
@@ -171,7 +173,9 @@ class MongoDbClient(Database):
 
         return bytes(doc["index_data"])
 
-    def insert_embeddings(self, embeddings: List[Dict[str, Any]], batch_size: int = 100) -> int:
+    def insert_embeddings(
+        self, embeddings: List[Dict[str, Any]], batch_size: int = 100
+    ) -> int:
         """
         Insert embeddings into MongoDB.
         Args:
@@ -197,7 +201,10 @@ class MongoDbClient(Database):
             embedding_hash = hashlib.sha256(embedding_bytes).hexdigest()
 
             int_id = self.counters.find_one_and_update(
-                {"_id": "embedding_id"}, {"$inc": {"seq": 1}}, upsert=True, return_document=True
+                {"_id": "embedding_id"},
+                {"$inc": {"seq": 1}},
+                upsert=True,
+                return_document=True,
             )["seq"]
 
             docs.append(
@@ -220,7 +227,9 @@ class MongoDbClient(Database):
         inserted = 0
         try:
             for i in range(0, len(docs), batch_size):
-                result = self.embeddings.insert_many(docs[i : i + batch_size], ordered=False)
+                result = self.embeddings.insert_many(
+                    docs[i : i + batch_size], ordered=False
+                )
                 inserted += len(result.inserted_ids)
         except (self.DuplicateKeyError, self.BulkWriteError) as e:
             if len(docs) == 1:

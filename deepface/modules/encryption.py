@@ -15,7 +15,8 @@ logger = Logger()
 
 # pylint: disable=no-else-return
 def encrypt_embeddings(
-    embeddings: Union[List[float], List[List[float]]], cryptosystem: Optional[LightPHE] = None
+    embeddings: Union[List[float], List[List[float]]],
+    cryptosystem: Optional[LightPHE] = None,
 ) -> Union[EncryptedTensor, List[EncryptedTensor], None]:
     """
     Encrypt embeddings using a provided cryptosystem.
@@ -46,7 +47,9 @@ def encrypt_embeddings(
         return encrypted_embeddings
 
 
-def encrypt_embedding(embeddings: List[float], cryptosystem: LightPHE) -> Optional[EncryptedTensor]:
+def encrypt_embedding(
+    embeddings: List[float], cryptosystem: LightPHE
+) -> Optional[EncryptedTensor]:
     """
     Encrypt an embedding using a provided cryptosystem.
     Args:

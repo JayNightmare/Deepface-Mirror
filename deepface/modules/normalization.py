@@ -43,7 +43,10 @@ def normalize_embedding_minmax(
             emb = [max(x, dim_min) for x in emb]  # lower-bound clamp
             emb = [min(x, dim_max) for x in emb]  # upper-bound clamp
 
-            emb = [(min(max(x, dim_min), dim_max) - dim_min) / (dim_max - dim_min) for x in emb]
+            emb = [
+                (min(max(x, dim_min), dim_max) - dim_min) / (dim_max - dim_min)
+                for x in emb
+            ]
             normalized_embeddings.append(emb)
         embeddings = normalized_embeddings
 

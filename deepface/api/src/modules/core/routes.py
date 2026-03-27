@@ -65,7 +65,9 @@ def extract_image_from_request(img_key: str) -> Union[str, NDArray[Any]]:
         str_img: str = cast(str, input_args.get(img_key))
 
         if not str_img:
-            raise ValueError(f"'{img_key}' not found in either json or form data request")
+            raise ValueError(
+                f"'{img_key}' not found in either json or form data request"
+            )
 
         return str_img
 

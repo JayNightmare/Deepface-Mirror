@@ -39,6 +39,7 @@ if TYPE_CHECKING:
 
     cached_models: Dict[str, Dict[str, Any]] = {}
 
+cached_models: Dict[str, Dict[str, Any]] = {}
 
 class AvailableModels(TypedDict):
     facial_recognition: dict[str, type[FacialRecognition]]

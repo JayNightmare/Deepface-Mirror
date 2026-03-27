@@ -16,7 +16,10 @@ logger = Logger()
 
 class YoloModel(Enum):
     # ref repo for v8n is https://github.com/derronqi/yolov8-face
-    V8N = ("yolov8n-face.pt", "https://drive.google.com/uc?id=1qcr9DbgsX3ryrz2uU8w4Xm3cOrRywXqb")
+    V8N = (
+        "yolov8n-face.pt",
+        "https://drive.google.com/uc?id=1qcr9DbgsX3ryrz2uU8w4Xm3cOrRywXqb",
+    )
     V8M = (
         "yolov8m-face.pt",
         "https://github.com/YapaLab/yolo-face/releases/download/1.0.0/yolov8m-face.pt",
@@ -88,9 +91,13 @@ class YoloDetectorClient(Detector):
         current_version = tuple(map(int, ultralytics.__version__.split(".")[:3]))
 
         if model.name == "V8N" and current_version < (8, 1, 6):
-            raise ValueError("Yolov8n-face model requires ultralytics version 8.1.6 or higher.")
+            raise ValueError(
+                "Yolov8n-face model requires ultralytics version 8.1.6 or higher."
+            )
         if model.name in ["V11N", "V11S", "V11M"] and current_version < (8, 3, 203):
-            raise ValueError("Yolov11 models require ultralytics version 8.3.203 or higher.")
+            raise ValueError(
+                "Yolov11 models require ultralytics version 8.3.203 or higher."
+            )
 
         file_name, weight_url = model.value
         weight_file = weight_utils.download_weights_if_necessary(

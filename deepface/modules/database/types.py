@@ -24,7 +24,9 @@ class Database(ABC):
         pass
 
     @abstractmethod
-    def insert_embeddings(self, embeddings: List[Dict[str, Any]], batch_size: int = 100) -> int:
+    def insert_embeddings(
+        self, embeddings: List[Dict[str, Any]], batch_size: int = 100
+    ) -> int:
         """
         Insert embeddings into the database in batches.
         """

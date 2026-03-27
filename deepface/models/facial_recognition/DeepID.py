@@ -34,9 +34,7 @@ else:
 
 # pylint: disable=line-too-long
 
-WEIGHTS_URL = (
-    "https://github.com/JayNightmare/Deepface-Mirror_models/releases/download/v1.0/deepid_keras_weights.h5"
-)
+WEIGHTS_URL = "https://github.com/JayNightmare/Deepface-Mirror_models/releases/download/v1.0/deepid_keras_weights.h5"
 
 
 # pylint: disable=too-few-public-methods
@@ -61,7 +59,9 @@ def load_model(
 
     myInput = Input(shape=(55, 47, 3))
 
-    x = Conv2D(20, (4, 4), name="Conv1", activation="relu", input_shape=(55, 47, 3))(myInput)
+    x = Conv2D(20, (4, 4), name="Conv1", activation="relu", input_shape=(55, 47, 3))(
+        myInput
+    )
     x = MaxPooling2D(pool_size=2, strides=2, name="Pool1")(x)
     x = Dropout(rate=0.99, name="D1")(x)
 

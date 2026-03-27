@@ -189,7 +189,9 @@ def find(
         __save_representations(datastore_path=datastore_path, credentials=credentials)
 
     # Load the representations from the existing datastore
-    representations = __load_representations(datastore_path=datastore_path, credentials=credentials)
+    representations = __load_representations(
+        datastore_path=datastore_path, credentials=credentials
+    )
 
     # check each item of representations list has required keys
     for i, current_representation in enumerate(representations):
@@ -220,7 +222,9 @@ def find(
     # Enforce data consistency amongst on disk images and pickle file
     if refresh_database:
         # embedded images
-        pickled_images = {representation["identity"] for representation in representations}
+        pickled_images = {
+            representation["identity"] for representation in representations
+        }
 
         new_images = storage_images - pickled_images  # images added to storage
         old_images = pickled_images - storage_images  # images removed from storage
@@ -233,10 +237,14 @@ def find(
             alpha_hash = current_representation["hash"]
             beta_hash = image_utils.find_image_hash(identity)
             if alpha_hash != beta_hash:
-                logger.debug(f"Even though {identity} represented before, it's replaced later.")
+                logger.debug(
+                    f"Even though {identity} represented before, it's replaced later."
+                )
                 replaced_images.add(identity)
 
-    if not silent and (len(new_images) > 0 or len(old_images) > 0 or len(replaced_images) > 0):
+    if not silent and (
+        len(new_images) > 0 or len(old_images) > 0 or len(replaced_images) > 0
+    ):
         logger.info(
             f"Found {len(new_images)} newly added image(s)"
             f", {len(old_images)} removed image(s)"
@@ -249,7 +257,9 @@ def find(
 
     # remove old images first
     if len(old_images) > 0:
-        representations = [rep for rep in representations if rep["identity"] not in old_images]
+        representations = [
+            rep for rep in representations if rep["identity"] not in old_images
+        ]
         must_save_pickle = True
 
     # find representations for new images
@@ -268,10 +278,14 @@ def find(
 
     if must_save_pickle:
         __save_representations(
-            datastore_path=datastore_path, representations=representations, credentials=credentials
+            datastore_path=datastore_path,
+            representations=representations,
+            credentials=credentials,
         )
         if not silent:
-            logger.info(f"There are now {len(representations)} representations in {file_name}")
+            logger.info(
+                f"There are now {len(representations)} representations in {file_name}"
+            )
 
     # Should we have no representations bailout
     if len(representations) == 0:
@@ -395,7 +409,9 @@ def find(
         if similarity_search is False:
             result_df = result_df[result_df["distance"] <= result_df["threshold"]]
 
-        result_df = result_df.sort_values(by=["distance"], ascending=True).reset_index(drop=True)
+        result_df = result_df.sort_values(by=["distance"], ascending=True).reset_index(
+            drop=True
+        )
 
         if k is not None and len(result_df) > k:
             result_df = result_df.head(k)
@@ -471,7 +487,9 @@ def __find_bulk_embeddings(
             )
 
         except ValueError as err:
-            logger.error(f"Exception while extracting faces from {employee}: {str(err)}")
+            logger.error(
+                f"Exception while extracting faces from {employee}: {str(err)}"
+            )
             img_objs = []
 
         if len(img_objs) == 0:
@@ -610,7 +628,8 @@ def find_batched(
     valid_mask = np.array(valid_mask_lst)  # (N,)
 
     data = {
-        key: np.array([item.get(key, None) for item in representations]) for key in metadata_lst
+        key: np.array([item.get(key, None) for item in representations])
+        for key in metadata_lst
     }
 
     target_embeddings = []
@@ -680,11 +699,14 @@ def find_batched(
         filtered_data = {key: value[mask] for key, value in result_data.items()}
 
         sorted_indices = np.argsort(filtered_data["distance"])
-        sorted_data = {key: value[sorted_indices] for key, value in filtered_data.items()}
+        sorted_data = {
+            key: value[sorted_indices] for key, value in filtered_data.items()
+        }
 
         num_results = len(sorted_data["distance"])
         result_dicts = [
-            {key: sorted_data[key][i] for key in sorted_data} for i in range(num_results)
+            {key: sorted_data[key][i] for key in sorted_data}
+            for i in range(num_results)
         ]
 
         if k is not None and len(result_dicts) > k:
@@ -832,8 +854,8 @@ def __verify_signature(
         signature_unified = f.read()
 
     try:
-        signature: Union[Tuple[int, int], Tuple[Tuple[int, int], int], int] = ast.literal_eval(
-            signature_unified
+        signature: Union[Tuple[int, int], Tuple[Tuple[int, int], int], int] = (
+            ast.literal_eval(signature_unified)
         )
     except SyntaxError as err:
         raise ValueError(
@@ -856,7 +878,9 @@ def __verify_signature(
             )
     elif algorithm_name == "eddsa":
         if (
-            not isinstance(signature, tuple)  # pylint: disable=too-many-boolean-expressions
+            not isinstance(
+                signature, tuple
+            )  # pylint: disable=too-many-boolean-expressions
             or len(signature) != 2
             or not isinstance(signature[0], tuple)
             or len(signature[0]) != 2

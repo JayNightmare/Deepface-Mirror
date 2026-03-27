@@ -34,11 +34,14 @@ class MediaPipeClient(Detector):
 
         mp_face_detection = mp.solutions.face_detection
 
-        min_detection_confidence = float(os.environ.get("MEDIAPIPE_MIN_DETECTION_CONFIDENCE", 0.7))
+        min_detection_confidence = float(
+            os.environ.get("MEDIAPIPE_MIN_DETECTION_CONFIDENCE", 0.7)
+        )
         model_selection = int(os.environ.get("MEDIAPIPE_MODEL_SELECTION", 0))
 
         face_detection = mp_face_detection.FaceDetection(
-            min_detection_confidence=min_detection_confidence, model_selection=model_selection
+            min_detection_confidence=min_detection_confidence,
+            model_selection=model_selection,
         )
         return face_detection
 
@@ -75,8 +78,14 @@ class MediaPipeClient(Detector):
             y = int(bounding_box.ymin * img_height)
             h = int(bounding_box.height * img_height)
 
-            right_eye = (int(landmarks[0].x * img_width), int(landmarks[0].y * img_height))
-            left_eye = (int(landmarks[1].x * img_width), int(landmarks[1].y * img_height))
+            right_eye = (
+                int(landmarks[0].x * img_width),
+                int(landmarks[0].y * img_height),
+            )
+            left_eye = (
+                int(landmarks[1].x * img_width),
+                int(landmarks[1].y * img_height),
+            )
             # nose = (int(landmarks[2].x * img_width), int(landmarks[2].y * img_height))
             # mouth = (int(landmarks[3].x * img_width), int(landmarks[3].y * img_height))
             # right_ear = (int(landmarks[4].x * img_width), int(landmarks[4].y * img_height))

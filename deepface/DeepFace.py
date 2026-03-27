@@ -176,7 +176,9 @@ def verify(
 
 
 def analyze(
-    img_path: Union[str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]],
+    img_path: Union[
+        str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]
+    ],
     actions: Union[Tuple[str, ...], List[str]] = ("emotion", "age", "gender", "race"),
     enforce_detection: bool = True,
     detector_backend: str = "opencv",
@@ -418,7 +420,9 @@ def find(
 
 
 def represent(
-    img_path: Union[str, NDArray[Any], IO[bytes], Sequence[Union[str, NDArray[Any], IO[bytes]]]],
+    img_path: Union[
+        str, NDArray[Any], IO[bytes], Sequence[Union[str, NDArray[Any], IO[bytes]]]
+    ],
     model_name: str = "VGG-Face",
     enforce_detection: bool = True,
     detector_backend: str = "opencv",
@@ -589,7 +593,9 @@ def stream(
 
 
 def extract_faces(
-    img_path: Union[str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]],
+    img_path: Union[
+        str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]
+    ],
     detector_backend: str = "opencv",
     enforce_detection: bool = True,
     align: bool = True,
@@ -717,12 +723,16 @@ def detectFace(
     extracted_face = None
     if len(face_objs) > 0:
         extracted_face = face_objs[0]["face"]
-        extracted_face = preprocessing.resize_image(img=extracted_face, target_size=target_size)
+        extracted_face = preprocessing.resize_image(
+            img=extracted_face, target_size=target_size
+        )
     return extracted_face
 
 
 def register(
-    img: Union[str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]],
+    img: Union[
+        str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]
+    ],
     img_name: Optional[str] = None,
     model_name: str = "VGG-Face",
     detector_backend: str = "opencv",
@@ -795,7 +805,9 @@ def register(
 
 
 def search(
-    img: Union[str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]],
+    img: Union[
+        str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]
+    ],
     model_name: str = "VGG-Face",
     detector_backend: str = "opencv",
     distance_metric: str = "cosine",

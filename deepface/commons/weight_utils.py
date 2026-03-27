@@ -50,7 +50,9 @@ def download_weights_if_necessary(
         raise UnimplementedError(f"unimplemented compress type - {compress_type}")
 
     try:
-        logger.info(f"🔗 {file_name} will be downloaded from {source_url} to {target_file}...")
+        logger.info(
+            f"🔗 {file_name} will be downloaded from {source_url} to {target_file}..."
+        )
 
         if compress_type is None:
             gdown.download(source_url, target_file, quiet=False)
@@ -107,14 +109,27 @@ def download_all_models_in_one_shot() -> None:
     """
 
     # import model weights from module here to avoid circular import issue
-    from deepface.models.facial_recognition.VGGFace import WEIGHTS_URL as VGGFACE_WEIGHTS
-    from deepface.models.facial_recognition.Facenet import FACENET128_WEIGHTS, FACENET512_WEIGHTS
-    from deepface.models.facial_recognition.OpenFace import WEIGHTS_URL as OPENFACE_WEIGHTS
-    from deepface.models.facial_recognition.FbDeepFace import WEIGHTS_URL as FBDEEPFACE_WEIGHTS
-    from deepface.models.facial_recognition.ArcFace import WEIGHTS_URL as ARCFACE_WEIGHTS
+    from deepface.models.facial_recognition.VGGFace import (
+        WEIGHTS_URL as VGGFACE_WEIGHTS,
+    )
+    from deepface.models.facial_recognition.Facenet import (
+        FACENET128_WEIGHTS,
+        FACENET512_WEIGHTS,
+    )
+    from deepface.models.facial_recognition.OpenFace import (
+        WEIGHTS_URL as OPENFACE_WEIGHTS,
+    )
+    from deepface.models.facial_recognition.FbDeepFace import (
+        WEIGHTS_URL as FBDEEPFACE_WEIGHTS,
+    )
+    from deepface.models.facial_recognition.ArcFace import (
+        WEIGHTS_URL as ARCFACE_WEIGHTS,
+    )
     from deepface.models.facial_recognition.DeepID import WEIGHTS_URL as DEEPID_WEIGHTS
     from deepface.models.facial_recognition.SFace import WEIGHTS_URL as SFACE_WEIGHTS
-    from deepface.models.facial_recognition.GhostFaceNet import WEIGHTS_URL as GHOSTFACENET_WEIGHTS
+    from deepface.models.facial_recognition.GhostFaceNet import (
+        WEIGHTS_URL as GHOSTFACENET_WEIGHTS,
+    )
     from deepface.models.facial_recognition.Dlib import WEIGHT_URL as DLIB_FR_WEIGHTS
     from deepface.models.demography.Age import WEIGHTS_URL as AGE_WEIGHTS
     from deepface.models.demography.Gender import WEIGHTS_URL as GENDER_WEIGHTS
@@ -131,7 +146,9 @@ def download_all_models_in_one_shot() -> None:
     from deepface.models.face_detection.Yolo import YoloModel
     from deepface.models.face_detection.YuNet import WEIGHTS_URL as YUNET_WEIGHTS
     from deepface.models.face_detection.Dlib import WEIGHTS_URL as DLIB_FD_WEIGHTS
-    from deepface.models.face_detection.CenterFace import WEIGHTS_URL as CENTERFACE_WEIGHTS
+    from deepface.models.face_detection.CenterFace import (
+        WEIGHTS_URL as CENTERFACE_WEIGHTS,
+    )
 
     WEIGHTS = [
         # facial recognition

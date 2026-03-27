@@ -37,9 +37,13 @@ class YuNetClient(Detector):
         opencv_version_major = int(opencv_version[0])
         opencv_version_minor = int(opencv_version[1])
 
-        if opencv_version_major < 4 or (opencv_version_major == 4 and opencv_version_minor < 8):
+        if opencv_version_major < 4 or (
+            opencv_version_major == 4 and opencv_version_minor < 8
+        ):
             # min requirement: https://github.com/opencv/opencv_zoo/issues/172
-            raise ValueError(f"YuNet requires opencv-python >= 4.8 but you have {cv2.__version__}")
+            raise ValueError(
+                f"YuNet requires opencv-python >= 4.8 but you have {cv2.__version__}"
+            )
 
         # pylint: disable=C0301
         weight_file = weight_utils.download_weights_if_necessary(

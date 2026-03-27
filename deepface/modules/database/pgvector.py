@@ -52,7 +52,9 @@ class PGVectorClient(Database):
             self.conn = connection
         else:
             # Retrieve connection details from parameter or environment variable
-            self.conn_details = connection_details or os.environ.get("DEEPFACE_POSTGRES_URI")
+            self.conn_details = connection_details or os.environ.get(
+                "DEEPFACE_POSTGRES_URI"
+            )
             if not self.conn_details:
                 raise ValueError(
                     "PostgreSQL connection information not found. "
@@ -65,7 +67,9 @@ class PGVectorClient(Database):
             elif isinstance(self.conn_details, dict):
                 self.conn = self.psycopg.connect(**self.conn_details)
             else:
-                raise ValueError("connection_details must be either a string or a dict.")
+                raise ValueError(
+                    "connection_details must be either a string or a dict."
+                )
 
         # is pgvector extension installed?
         try:
@@ -165,7 +169,9 @@ class PGVectorClient(Database):
 
         _SCHEMA_CHECKED[table_name] = True
 
-    def insert_embeddings(self, embeddings: List[Dict[str, Any]], batch_size: int = 100) -> int:
+    def insert_embeddings(
+        self, embeddings: List[Dict[str, Any]], batch_size: int = 100
+    ) -> int:
         """
         Insert multiple embeddings into PostgreSQL.
         Args:

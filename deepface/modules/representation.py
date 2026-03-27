@@ -11,7 +11,10 @@ from lightphe import LightPHE
 from deepface.commons import image_utils
 from deepface.modules import modeling, detection, preprocessing
 from deepface.models.FacialRecognition import FacialRecognition
-from deepface.modules.normalization import normalize_embedding_l2, normalize_embedding_minmax
+from deepface.modules.normalization import (
+    normalize_embedding_l2,
+    normalize_embedding_minmax,
+)
 from deepface.modules.encryption import encrypt_embeddings
 from deepface.modules.exceptions import SpoofDetected
 from deepface.commons.logger import Logger
@@ -21,7 +24,9 @@ logger = Logger()
 
 # pylint: disable=too-many-positional-arguments
 def represent(
-    img_path: Union[str, IO[bytes], NDArray[Any], Sequence[Union[str, NDArray[Any], IO[bytes]]]],
+    img_path: Union[
+        str, IO[bytes], NDArray[Any], Sequence[Union[str, NDArray[Any], IO[bytes]]]
+    ],
     model_name: str = "VGG-Face",
     enforce_detection: bool = True,
     detector_backend: str = "opencv",
@@ -138,7 +143,9 @@ def represent(
             img, _ = image_utils.load_image(single_img_path)
 
             if len(img.shape) != 3:
-                raise ValueError(f"Input img must be 3 dimensional but it is {img.shape}")
+                raise ValueError(
+                    f"Input img must be 3 dimensional but it is {img.shape}"
+                )
 
             # Convert to RGB format to keep compatability with `extract_faces`.
             img = img[:, :, ::-1]
@@ -147,7 +154,12 @@ def represent(
             img_objs = [
                 {
                     "face": img,
-                    "facial_area": {"x": 0, "y": 0, "w": img.shape[0], "h": img.shape[1]},
+                    "facial_area": {
+                        "x": 0,
+                        "y": 0,
+                        "w": img.shape[0],
+                        "h": img.shape[1],
+                    },
                     "confidence": 0,
                 }
             ]
@@ -157,7 +169,8 @@ def represent(
             # sort as largest facial areas come first
             img_objs = sorted(
                 img_objs,
-                key=lambda img_obj: img_obj["facial_area"]["w"] * img_obj["facial_area"]["h"],
+                key=lambda img_obj: img_obj["facial_area"]["w"]
+                * img_obj["facial_area"]["h"],
                 reverse=True,
             )
             # discard rest of the items
@@ -216,7 +229,9 @@ def represent(
             resp_obj["face"] = batch_images_np[idy]
         if cryptosystem is not None and encrypted_embeddings is not None:
             resp_obj["encrypted_embedding"] = (
-                encrypted_embeddings if len(batch_images) == 1 else encrypted_embeddings[idy]
+                encrypted_embeddings
+                if len(batch_images) == 1
+                else encrypted_embeddings[idy]
             )
         resp_objs_dict[batch_index].append(resp_obj)
 

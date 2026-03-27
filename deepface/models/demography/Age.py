@@ -24,9 +24,7 @@ else:
     from tensorflow.keras.models import Model, Sequential
     from tensorflow.keras.layers import Convolution2D, Flatten, Activation
 
-WEIGHTS_URL = (
-    "https://github.com/JayNightmare/Deepface-Mirror_models/releases/download/v1.0/age_model_weights.h5"
-)
+WEIGHTS_URL = "https://github.com/JayNightmare/Deepface-Mirror_models/releases/download/v1.0/age_model_weights.h5"
 
 
 # pylint: disable=too-few-public-methods
@@ -62,7 +60,9 @@ class ApparentAgeClient(Demography):
         if len(age_predictions.shape) == 1:  # Single prediction list
             return find_apparent_age(age_predictions)
 
-        return np.array([find_apparent_age(age_prediction) for age_prediction in age_predictions])
+        return np.array(
+            [find_apparent_age(age_prediction) for age_prediction in age_predictions]
+        )
 
 
 def load_model(
@@ -80,7 +80,9 @@ def load_model(
 
     classes = 101
     base_model_output = Sequential()
-    base_model_output = Convolution2D(classes, (1, 1), name="predictions")(model.layers[-4].output)
+    base_model_output = Convolution2D(classes, (1, 1), name="predictions")(
+        model.layers[-4].output
+    )
     base_model_output = Flatten()(base_model_output)
     base_model_output = Activation("softmax")(base_model_output)
 
@@ -95,7 +97,9 @@ def load_model(
         file_name="age_model_weights.h5", source_url=url
     )
 
-    age_model = weight_utils.load_model_weights(model=age_model, weight_file=weight_file)
+    age_model = weight_utils.load_model_weights(
+        model=age_model, weight_file=weight_file
+    )
 
     return age_model
 

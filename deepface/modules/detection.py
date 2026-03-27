@@ -22,7 +22,9 @@ logger = Logger()
 
 
 def is_valid_landmark(
-    coord: Optional[Union[Tuple[int, int], Tuple[float, float], List[Union[float, int]]]],
+    coord: Optional[
+        Union[Tuple[int, int], Tuple[float, float], List[Union[float, int]]]
+    ],
     width: int,
     height: int,
 ) -> bool:
@@ -45,7 +47,9 @@ def is_valid_landmark(
 
 
 def extract_faces(
-    img_path: Union[str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]],
+    img_path: Union[
+        str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]
+    ],
     detector_backend: str = "opencv",
     enforce_detection: bool = True,
     align: bool = True,
@@ -106,7 +110,9 @@ def extract_faces(
         - "antispoof_score" (float): score of antispoofing analyze result. this key is
             just available in the result only if anti_spoofing is set to True in input arguments.
     """
-    if isinstance(img_path, list) or (isinstance(img_path, np.ndarray) and img_path.ndim == 4):
+    if isinstance(img_path, list) or (
+        isinstance(img_path, np.ndarray) and img_path.ndim == 4
+    ):
         if isinstance(img_path, np.ndarray):
             img_paths = [img_path[i] for i in range(img_path.shape[0])]
         else:
@@ -246,7 +252,9 @@ def extract_faces(
 
         if anti_spoofing is True:
             antispoof_model = modeling.build_model(task="spoofing", model_name="Fasnet")
-            is_real, antispoof_score = antispoof_model.analyze(img=img, facial_area=(x, y, w, h))
+            is_real, antispoof_score = antispoof_model.analyze(
+                img=img, facial_area=(x, y, w, h)
+            )
             resp_obj["is_real"] = is_real
             resp_obj["antispoof_score"] = antispoof_score
 
@@ -324,7 +332,9 @@ def detect_faces(
 
     if max_faces is not None and max_faces < len(facial_areas):
         facial_areas = nlargest(
-            max_faces, facial_areas, key=lambda facial_area: facial_area.w * facial_area.h
+            max_faces,
+            facial_areas,
+            key=lambda facial_area: facial_area.w * facial_area.h,
         )
 
     return [
@@ -397,7 +407,9 @@ def extract_face(
         # we were aligning the original image before, but this comes with an extra cost
         # instead we now focus on the facial area with a margin
         # and align it instead of original image to decrese the cost
-        sub_img, relative_x, relative_y = extract_sub_image(img=img, facial_area=(x, y, w, h))
+        sub_img, relative_x, relative_y = extract_sub_image(
+            img=img, facial_area=(x, y, w, h)
+        )
 
         aligned_sub_img, angle = align_img_wrt_eyes(
             img=sub_img, left_eye=left_eye, right_eye=right_eye
@@ -433,7 +445,10 @@ def extract_face(
         if mouth_left is not None:
             mouth_left = (mouth_left[0] - width_border, mouth_left[1] - height_border)
         if mouth_right is not None:
-            mouth_right = (mouth_right[0] - width_border, mouth_right[1] - height_border)
+            mouth_right = (
+                mouth_right[0] - width_border,
+                mouth_right[1] - height_border,
+            )
 
     return DetectedFace(
         img=detected_face,
@@ -499,7 +514,8 @@ def extract_sub_image(
     start_x = max(0, relative_x - x)
     start_y = max(0, relative_y - y)
     extracted_face[
-        start_y : start_y + cropped_region.shape[0], start_x : start_x + cropped_region.shape[1]
+        start_y : start_y + cropped_region.shape[0],
+        start_x : start_x + cropped_region.shape[1],
     ] = cropped_region
 
     return extracted_face, relative_x, relative_y
@@ -507,8 +523,12 @@ def extract_sub_image(
 
 def align_img_wrt_eyes(
     img: NDArray[Any],
-    left_eye: Optional[Union[List[float], List[int], Tuple[float, float], Tuple[int, int]]],
-    right_eye: Optional[Union[List[float], List[int], Tuple[float, float], Tuple[int, int]]],
+    left_eye: Optional[
+        Union[List[float], List[int], Tuple[float, float], Tuple[int, int]]
+    ],
+    right_eye: Optional[
+        Union[List[float], List[int], Tuple[float, float], Tuple[int, int]]
+    ],
 ) -> Tuple[NDArray[Any], float]:
     """
     Align a given image horizantally with respect to their left and right eye locations
@@ -527,13 +547,20 @@ def align_img_wrt_eyes(
     if img.shape[0] == 0 or img.shape[1] == 0:
         return img, 0
 
-    angle = float(np.degrees(np.arctan2(left_eye[1] - right_eye[1], left_eye[0] - right_eye[0])))
+    angle = float(
+        np.degrees(np.arctan2(left_eye[1] - right_eye[1], left_eye[0] - right_eye[0]))
+    )
 
     (h, w) = img.shape[:2]
     center = (w // 2, h // 2)
     M = cv2.getRotationMatrix2D(center, angle, 1.0)
     img = cv2.warpAffine(
-        img, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_CONSTANT, borderValue=(0, 0, 0)
+        img,
+        M,
+        (w, h),
+        flags=cv2.INTER_CUBIC,
+        borderMode=cv2.BORDER_CONSTANT,
+        borderValue=(0, 0, 0),
     )
 
     return img, angle

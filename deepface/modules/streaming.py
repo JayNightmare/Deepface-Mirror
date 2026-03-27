@@ -130,7 +130,9 @@ def analysis(
             )
 
             # use raw_img otherwise countdown number will appear in the middle of the face
-            detected_faces = extract_facial_areas(img=raw_img, faces_coordinates=faces_coordinates)
+            detected_faces = extract_facial_areas(
+                img=raw_img, faces_coordinates=faces_coordinates
+            )
 
             img = highlight_facial_areas(img=img, faces_coordinates=faces_coordinates)
 
@@ -142,9 +144,14 @@ def analysis(
                 num_frames_with_faces=num_frames_with_faces,
             )
 
-            num_frames_with_faces = num_frames_with_faces + 1 if len(faces_coordinates) else 0
+            num_frames_with_faces = (
+                num_frames_with_faces + 1 if len(faces_coordinates) else 0
+            )
 
-            freeze = num_frames_with_faces > 0 and num_frames_with_faces % frame_threshold == 0
+            freeze = (
+                num_frames_with_faces > 0
+                and num_frames_with_faces % frame_threshold == 0
+            )
 
             if freeze:
                 frame += 1
@@ -154,7 +161,9 @@ def analysis(
 
                 # add analyze results into img
                 img = highlight_facial_areas(
-                    img=img, faces_coordinates=faces_coordinates, anti_spoofing=anti_spoofing
+                    img=img,
+                    faces_coordinates=faces_coordinates,
+                    anti_spoofing=anti_spoofing,
                 )
 
                 if debug is True:
@@ -205,7 +214,9 @@ def analysis(
             logger.info("Freeze released")
 
         # count how many seconds required to relased freezed image in the left up area
-        freezed_img = countdown_to_release(img=freezed_img, tic=tic, time_threshold=time_threshold)
+        freezed_img = countdown_to_release(
+            img=freezed_img, tic=tic, time_threshold=time_threshold
+        )
         display_img = img if freezed_img is None else freezed_img
 
         # Save the frame to output video if writer is initialized
@@ -596,7 +607,9 @@ def perform_demography_analysis(
         # safe to access 1st index because detector backend is skip
         demography: Dict[str, Any] = demographies[0]
 
-        img = overlay_emotion(img=img, emotion_probas=demography["emotion"], x=x, y=y, w=w, h=h)
+        img = overlay_emotion(
+            img=img, emotion_probas=demography["emotion"], x=x, y=y, w=w, h=h
+        )
         img = overlay_age_gender(
             img=img,
             apparent_age=demography["age"],
@@ -881,7 +894,9 @@ def overlay_emotion(
         img (np.ndarray): image with overlay emotion analsis results
     """
     emotion_df = pd.DataFrame(emotion_probas.items(), columns=["emotion", "score"])
-    emotion_df = emotion_df.sort_values(by=["score"], ascending=False).reset_index(drop=True)
+    emotion_df = emotion_df.sort_values(by=["score"], ascending=False).reset_index(
+        drop=True
+    )
 
     # background of mood box
 

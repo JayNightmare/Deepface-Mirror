@@ -16,7 +16,14 @@ tf_version = package_utils.get_tf_major_version()
 
 if tf_version == 1:
     from keras.models import Sequential
-    from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D, Flatten, Dense, Dropout
+    from keras.layers import (
+        Conv2D,
+        MaxPooling2D,
+        AveragePooling2D,
+        Flatten,
+        Dense,
+        Dropout,
+    )
 else:
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import (

@@ -15,7 +15,9 @@ class Variables:
 
         connection_string = database_inventory[self.database_type]["connection_string"]
         conection_details = os.getenv(connection_string)
-        self.conection_details = os.getenv("DEEPFACE_CONNECTION_DETAILS") or conection_details
+        self.conection_details = (
+            os.getenv("DEEPFACE_CONNECTION_DETAILS") or conection_details
+        )
 
         self.face_recognition_models = os.getenv("DEEPFACE_FACE_RECOGNITION_MODELS")
         self.face_detection_models = os.getenv("DEEPFACE_FACE_DETECTION_MODELS")

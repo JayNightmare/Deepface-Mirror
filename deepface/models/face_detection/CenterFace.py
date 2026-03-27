@@ -16,7 +16,9 @@ logger = Logger()
 
 # pylint: disable=c-extension-no-member
 
-WEIGHTS_URL = "https://github.com/Star-Clouds/CenterFace/raw/master/models/onnx/centerface.onnx"
+WEIGHTS_URL = (
+    "https://github.com/Star-Clouds/CenterFace/raw/master/models/onnx/centerface.onnx"
+)
 
 
 class CenterFaceClient(Detector):
@@ -100,8 +102,12 @@ class CenterFace:
         self.scale_h: float = 0
         self.scale_w: float = 0
 
-    def forward(self, img: NDArray[Any], height: int, width: int, threshold: float = 0.5) -> Any:
-        self.img_h_new, self.img_w_new, self.scale_h, self.scale_w = self.transform(height, width)
+    def forward(
+        self, img: NDArray[Any], height: int, width: int, threshold: float = 0.5
+    ) -> Any:
+        self.img_h_new, self.img_w_new, self.scale_h, self.scale_w = self.transform(
+            height, width
+        )
         return self.inference_opencv(img, threshold)
 
     def inference_opencv(self, img: NDArray[Any], threshold: float) -> Any:
@@ -131,7 +137,12 @@ class CenterFace:
         threshold: float,
     ) -> Any:
         dets, lms = self.decode(
-            heatmap, scale, offset, lms, (self.img_h_new, self.img_w_new), threshold=threshold
+            heatmap,
+            scale,
+            offset,
+            lms,
+            (self.img_h_new, self.img_w_new),
+            threshold=threshold,
         )
         if len(dets) > 0:
             dets[:, 0:4:2], dets[:, 1:4:2] = (
@@ -164,7 +175,10 @@ class CenterFace:
         if len(c0) > 0:
             # pylint:disable=consider-using-enumerate
             for i in range(len(c0)):
-                s0, s1 = np.exp(scale0[c0[i], c1[i]]) * 4, np.exp(scale1[c0[i], c1[i]]) * 4
+                s0, s1 = (
+                    np.exp(scale0[c0[i], c1[i]]) * 4,
+                    np.exp(scale1[c0[i], c1[i]]) * 4,
+                )
                 o0, o1 = offset0[c0[i], c1[i]], offset1[c0[i], c1[i]]
                 s = heatmap[c0[i], c1[i]]
                 x1, y1 = max(0, (c1[i] + o1 + 0.5) * 4 - s1 / 2), max(
@@ -184,7 +198,9 @@ class CenterFace:
             lms_np = lms_np[keep, :]
         return boxes_np, lms_np
 
-    def nms(self, boxes: NDArray[Any], scores: NDArray[Any], nms_thresh: float) -> List[int]:
+    def nms(
+        self, boxes: NDArray[Any], scores: NDArray[Any], nms_thresh: float
+    ) -> List[int]:
         x1 = boxes[:, 0]
         y1 = boxes[:, 1]
         x2 = boxes[:, 2]

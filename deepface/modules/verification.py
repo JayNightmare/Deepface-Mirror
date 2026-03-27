@@ -196,14 +196,21 @@ def verify(
                 raise ValueError(f"Exception while processing img{index}_path") from err
         return img_embeddings, img_facial_areas
 
-    img1_embeddings, img1_facial_areas = extract_embeddings_and_facial_areas(img1_path, 1)
-    img2_embeddings, img2_facial_areas = extract_embeddings_and_facial_areas(img2_path, 2)
+    img1_embeddings, img1_facial_areas = extract_embeddings_and_facial_areas(
+        img1_path, 1
+    )
+    img2_embeddings, img2_facial_areas = extract_embeddings_and_facial_areas(
+        img2_path, 2
+    )
 
     min_distance, min_idx, min_idy = float("inf"), None, None
     for idx, img1_embedding in enumerate(img1_embeddings):
         for idy, img2_embedding in enumerate(img2_embeddings):
             distance: float = float(
-                cast(np.float64, find_distance(img1_embedding, img2_embedding, distance_metric))
+                cast(
+                    np.float64,
+                    find_distance(img1_embedding, img2_embedding, distance_metric),
+                )
             )
             if distance < min_distance:
                 min_distance, min_idx, min_idy = distance, idx, idy
@@ -277,7 +284,9 @@ def __extract_faces_and_embeddings(
         if anti_spoofing is True and img_obj.get("is_real", True) is False:
             raise SpoofDetected("Spoof detected in given image.")
         img_embedding_obj = representation.represent(
-            img_path=img_obj["face"][:, :, ::-1],  # make compatible with direct representation call
+            img_path=img_obj["face"][
+                :, :, ::-1
+            ],  # make compatible with direct representation call
             model_name=model_name,
             enforce_detection=enforce_detection,
             detector_backend="skip",
@@ -452,7 +461,10 @@ def find_distance(
     beta_embedding = np.asarray(beta_embedding)
 
     # Ensure that both embeddings are either 1D or 2D
-    if alpha_embedding.ndim != beta_embedding.ndim or alpha_embedding.ndim not in (1, 2):
+    if alpha_embedding.ndim != beta_embedding.ndim or alpha_embedding.ndim not in (
+        1,
+        2,
+    ):
         raise ValueError(
             f"Both embeddings must be either 1D or 2D, but received "
             f"alpha shape: {alpha_embedding.shape}, beta shape: {beta_embedding.shape}"
@@ -585,9 +597,9 @@ def find_confidence(
         min_target = 0
         max_target = min(49, int(max_original))
 
-    confidence_distributed = ((confidence - min_original) / (max_original - min_original)) * (
-        max_target - min_target
-    ) + min_target
+    confidence_distributed = (
+        (confidence - min_original) / (max_original - min_original)
+    ) * (max_target - min_target) + min_target
 
     # ensure confidence is within 51-100 for same persons and 0-49 for different persons
     if verified and confidence_distributed < 51:

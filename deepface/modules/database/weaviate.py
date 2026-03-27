@@ -44,22 +44,30 @@ class WeaviateClient(Database):
             # URL key for _WEAVIATE_CHECKED; fallback if client has no URL
             self.url = getattr(connection, "url", str(id(connection)))
         else:
-            self.conn_details = connection_details or os.environ.get("DEEPFACE_WEAVIATE_URL")
+            self.conn_details = connection_details or os.environ.get(
+                "DEEPFACE_WEAVIATE_URL"
+            )
             if isinstance(self.conn_details, str):
                 self.url = self.conn_details
                 self.api_key = os.getenv("WEAVIATE_API_KEY")
             elif isinstance(self.conn_details, dict):
                 self.url = self.conn_details.get("url")
-                self.api_key = self.conn_details.get("api_key") or os.getenv("WEAVIATE_API_KEY")
+                self.api_key = self.conn_details.get("api_key") or os.getenv(
+                    "WEAVIATE_API_KEY"
+                )
             else:
-                raise ValueError("connection_details must be a string or dict with 'url'.")
+                raise ValueError(
+                    "connection_details must be a string or dict with 'url'."
+                )
 
             if not self.url:
                 raise ValueError("Weaviate URL not provided in connection_details.")
 
             client_config = {"url": self.url}
             if getattr(self, "api_key", None):
-                client_config["auth_client_secret"] = self.weaviate.AuthApiKey(api_key=self.api_key)
+                client_config["auth_client_secret"] = self.weaviate.AuthApiKey(
+                    api_key=self.api_key
+                )
 
             self.client = self.weaviate.Client(**client_config)
 
@@ -118,7 +126,9 @@ class WeaviateClient(Database):
         logger.debug(f"Weaviate class {class_name} created successfully.")
         _SCHEMA_CHECKED[class_name] = True
 
-    def insert_embeddings(self, embeddings: List[Dict[str, Any]], batch_size: int = 100) -> int:
+    def insert_embeddings(
+        self, embeddings: List[Dict[str, Any]], batch_size: int = 100
+    ) -> int:
         """
         Insert multiple embeddings into Weaviate using batch API.
         """
@@ -144,7 +154,9 @@ class WeaviateClient(Database):
             for e in embeddings:
                 face_json = json.dumps(e["face"].tolist())
                 face_hash = hashlib.sha256(face_json.encode()).hexdigest()
-                embedding_bytes = struct.pack(f'{len(e["embedding"])}d', *e["embedding"])
+                embedding_bytes = struct.pack(
+                    f'{len(e["embedding"])}d', *e["embedding"]
+                )
                 embedding_hash = hashlib.sha256(embedding_bytes).hexdigest()
 
                 # Check if embedding already exists
@@ -181,7 +193,9 @@ class WeaviateClient(Database):
                     "embedding_hash": embedding_hash,
                 }
 
-                batcher.add_data_object(properties, class_name, vector=e["embedding"], uuid=uid)
+                batcher.add_data_object(
+                    properties, class_name, vector=e["embedding"], uuid=uid
+                )
 
         return len(embeddings)
 

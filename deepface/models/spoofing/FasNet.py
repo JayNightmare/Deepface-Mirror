@@ -140,7 +140,9 @@ class Fasnet:
         prediction += second_result
 
         label = np.argmax(prediction)
-        is_real = True if label == 1 else False  # pylint: disable=simplifiable-if-expression
+        is_real = (
+            True if label == 1 else False
+        )  # pylint: disable=simplifiable-if-expression
         score = prediction[0][label] / 2
 
         return is_real, score
@@ -229,7 +231,9 @@ def crop(
     out_h: int,
 ) -> Any:
     src_h, src_w, _ = np.shape(org_img)
-    left_top_x, left_top_y, right_bottom_x, right_bottom_y = _get_new_box(src_w, src_h, bbox, scale)
+    left_top_x, left_top_y, right_bottom_x, right_bottom_y = _get_new_box(
+        src_w, src_h, bbox, scale
+    )
     img = org_img[left_top_y : right_bottom_y + 1, left_top_x : right_bottom_x + 1]
     dst_img = cv2.resize(img, (out_w, out_h))
     return dst_img

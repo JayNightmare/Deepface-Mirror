@@ -22,9 +22,7 @@ else:
     from tensorflow.keras.models import Model, Sequential
     from tensorflow.keras.layers import Convolution2D, Flatten, Activation
 
-WEIGHTS_URL = (
-    "https://github.com/JayNightmare/Deepface-Mirror_models/releases/download/v1.0/race_model_single_batch.h5"
-)
+WEIGHTS_URL = "https://github.com/JayNightmare/Deepface-Mirror_models/releases/download/v1.0/race_model_single_batch.h5"
 # Labels for the ethnic phenotypes that can be detected by the model.
 labels = ["asian", "indian", "black", "white", "middle eastern", "latino hispanic"]
 
@@ -74,7 +72,9 @@ def load_model(
 
     classes = 6
     base_model_output = Sequential()
-    base_model_output = Convolution2D(classes, (1, 1), name="predictions")(model.layers[-4].output)
+    base_model_output = Convolution2D(classes, (1, 1), name="predictions")(
+        model.layers[-4].output
+    )
     base_model_output = Flatten()(base_model_output)
     base_model_output = Activation("softmax")(base_model_output)
 
@@ -89,6 +89,8 @@ def load_model(
         file_name="race_model_single_batch.h5", source_url=url
     )
 
-    race_model = weight_utils.load_model_weights(model=race_model, weight_file=weight_file)
+    race_model = weight_utils.load_model_weights(
+        model=race_model, weight_file=weight_file
+    )
 
     return race_model

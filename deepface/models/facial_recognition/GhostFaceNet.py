@@ -108,13 +108,32 @@ def GhostFaceNetV1() -> Model:
     nn = Activation("relu")(nn)
 
     dwkernels = [3, 3, 3, 5, 5, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5]
-    exps = [20, 64, 92, 92, 156, 312, 260, 240, 240, 624, 872, 872, 1248, 1248, 1248, 664]
+    exps = [
+        20,
+        64,
+        92,
+        92,
+        156,
+        312,
+        260,
+        240,
+        240,
+        624,
+        872,
+        872,
+        1248,
+        1248,
+        1248,
+        664,
+    ]
     outs = [20, 32, 32, 52, 52, 104, 104, 104, 104, 144, 144, 208, 208, 208, 208, 208]
     strides_set = [1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1]
     reductions = [0, 0, 0, 24, 40, 0, 0, 0, 0, 156, 220, 220, 0, 312, 0, 168]
 
     pre_out = out_channel
-    for dwk, stride, exp, out, reduction in zip(dwkernels, strides_set, exps, outs, reductions):
+    for dwk, stride, exp, out, reduction in zip(
+        dwkernels, strides_set, exps, outs, reductions
+    ):
         shortcut = not (out == pre_out and stride == 1)
         nn = ghost_bottleneck(nn, dwk, stride, exp, out, reduction, shortcut)
         pre_out = out
@@ -139,7 +158,9 @@ def GhostFaceNetV1() -> Model:
     nn = xx.outputs[0]
 
     nn = keras.layers.DepthwiseConv2D(nn.shape[1], use_bias=False, name="GDC_dw")(nn)
-    nn = keras.layers.BatchNormalization(momentum=0.99, epsilon=0.001, name="GDC_batchnorm")(nn)
+    nn = keras.layers.BatchNormalization(
+        momentum=0.99, epsilon=0.001, name="GDC_batchnorm"
+    )(nn)
     nn = keras.layers.Conv2D(
         512, 1, use_bias=True, kernel_initializer="glorot_normal", name="GDC_conv"
     )(nn)
@@ -148,7 +169,9 @@ def GhostFaceNetV1() -> Model:
     embedding = keras.layers.BatchNormalization(
         momentum=0.99, epsilon=0.001, scale=True, name="pre_embedding"
     )(nn)
-    embedding_fp32 = keras.layers.Activation("linear", dtype="float32", name="embedding")(embedding)
+    embedding_fp32 = keras.layers.Activation(
+        "linear", dtype="float32", name="embedding"
+    )(embedding)
 
     model = keras.models.Model(inputs, embedding_fp32, name=xx.name)
     model = replace_relu_with_prelu(model=model)
@@ -196,7 +219,11 @@ def se_module(inputs: Any, reduction: int) -> Any:
 
 
 def ghost_module(
-    inputs: Any, out: int, convkernel: int = 1, dwkernel: int = 3, add_activation: bool = True
+    inputs: Any,
+    out: int,
+    convkernel: int = 1,
+    dwkernel: int = 3,
+    add_activation: bool = True,
 ) -> Any:
     """
     Refactored from github.com/HamadYA/GhostFaceNets/blob/main/backbones/ghost_model.py
@@ -262,7 +289,9 @@ def ghost_bottleneck(
         nn = se_module(nn, reduction)
 
     # Point-wise linear projection
-    nn = ghost_module(nn, out, add_activation=False)  # ghost2 = GhostModule(exp, out, relu=False)
+    nn = ghost_module(
+        nn, out, add_activation=False
+    )  # ghost2 = GhostModule(exp, out, relu=False)
 
     if shortcut:
         xx = DepthwiseConv2D(
@@ -314,4 +343,6 @@ def replace_relu_with_prelu(model: Model) -> Model:
         return layer
 
     input_tensors = keras.layers.Input(model.input_shape[1:])
-    return keras.models.clone_model(model, input_tensors=input_tensors, clone_function=convert_relu)
+    return keras.models.clone_model(
+        model, input_tensors=input_tensors, clone_function=convert_relu
+    )

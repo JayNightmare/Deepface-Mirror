@@ -100,7 +100,9 @@ def load_image(
     # The image is an object that supports `.read`
     if hasattr(img, "read") and callable(img.read):
         if isinstance(img, io.StringIO):
-            raise DataTypeError("img requires bytes and cannot be an io.StringIO object.")
+            raise DataTypeError(
+                "img requires bytes and cannot be an io.StringIO object."
+            )
         return load_image_from_io_object(cast(IO[bytes], img)), "io object"
 
     if isinstance(img, Path):

@@ -14,7 +14,9 @@ from deepface.modules.exceptions import UnimplementedError, SpoofDetected
 
 # pylint: disable=too-many-positional-arguments
 def analyze(
-    img_path: Union[str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]],
+    img_path: Union[
+        str, NDArray[Any], IO[bytes], List[str], List[NDArray[Any]], List[IO[bytes]]
+    ],
     actions: Union[Tuple[str, ...], List[str]] = ("emotion", "age", "gender", "race"),
     enforce_detection: bool = True,
     detector_backend: str = "opencv",
@@ -105,9 +107,11 @@ def analyze(
     """
 
     # batch input
-    if (isinstance(img_path, np.ndarray) and img_path.ndim == 4 and img_path.shape[0] > 1) or (
-        isinstance(img_path, list)
-    ):
+    if (
+        isinstance(img_path, np.ndarray)
+        and img_path.ndim == 4
+        and img_path.shape[0] > 1
+    ) or (isinstance(img_path, list)):
         batch_resp_obj: List[List[Dict[str, Any]]] = []
         # Execute analysis for each image in the batch.
         for single_img in img_path:
@@ -175,7 +179,9 @@ def analyze(
         img_content = img_content[:, :, ::-1]
 
         # resize input image
-        img_content = preprocessing.resize_image(img=img_content, target_size=(224, 224))
+        img_content = preprocessing.resize_image(
+            img=img_content, target_size=(224, 224)
+        )
 
         obj: Dict[str, Any] = {}
         # facial attribute analysis
@@ -196,7 +202,9 @@ def analyze(
 
                 obj["emotion"] = {}
                 for i, emotion_label in enumerate(Emotion.labels):
-                    emotion_prediction = 100 * emotion_predictions[i] / sum_of_predictions
+                    emotion_prediction = (
+                        100 * emotion_predictions[i] / sum_of_predictions
+                    )
                     obj["emotion"][emotion_label] = emotion_prediction
 
                 obj["dominant_emotion"] = Emotion.labels[np.argmax(emotion_predictions)]
