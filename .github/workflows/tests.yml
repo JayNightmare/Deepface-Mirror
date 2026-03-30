@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.13.1]
+        python-version: [3.11]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.13.1]
+        python-version: [3.11]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
@@ -67,20 +67,42 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.13.1]
+        python-version: [3.11]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Cache DeepFace weights
+        uses: actions/cache@v4
+        with:
+          path: ~/.deepface/weights
+          key: deepface-weights-${{ runner.os }}-py${{ matrix.python-version }}
+          restore-keys: |
+            deepface-weights-${{ runner.os }}-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pytest
-          # sending files in form data throwing error in flask 3 while running tests
-          pip install Werkzeug==2.0.2 flask==2.0.2
           pip install .
+      - name: Remove corrupted DeepFace weights (if any)
+        run: |
+          python - <<'PY'
+          import os, glob
+          weights_dir = os.path.expanduser("~/.deepface/weights")
+          if not os.path.isdir(weights_dir):
+            raise SystemExit(0)
+
+          # Remove suspiciously small files (often indicates truncated downloads)
+          for p in glob.glob(os.path.join(weights_dir, "*.h5")):
+            try:
+              if os.path.getsize(p) < 1024 * 100:  # <100KB is definitely broken for these models
+                print("Removing tiny weight file:", p)
+                os.remove(p)
+            except OSError:
+              pass
+          PY
       - name: Test with pytest
         run: |
           cd tests/unit

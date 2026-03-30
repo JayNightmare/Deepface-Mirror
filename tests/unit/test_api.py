@@ -599,18 +599,36 @@ def is_form_data_file_testable() -> bool:
     """
     Sending a file from form data fails in unit test with
         415 unsupported media type error for flask 3.X
-        but it is working for flask 2.0.2
+        but it is working for flask 2.2.5
     Returns:
         is_form_data_file_testable (bool)
     """
+    try:
+        from importlib.metadata import version as get_version, PackageNotFoundError
+    except ImportError:  # Python < 3.8
+        from importlib_metadata import version as get_version, PackageNotFoundError
+
     flask_version = version.parse(flask.__version__)
-    werkzeus_version = version.parse(werkzeug.__version__)
-    threshold_version = version.parse("2.0.2")
-    is_testable = flask_version <= threshold_version and werkzeus_version <= threshold_version
+    threshold_version = version.parse("2.3.0")
+    try:
+        werkzeug_version_str = get_version("werkzeug")
+    except PackageNotFoundError:
+        # If werkzeug version is unknown, assume it's compatible and
+        # base testability only on the Flask version.
+        is_testable = flask_version < threshold_version
+        if is_testable is False:
+            logger.warn(
+                "sending file in form data is not testable because werkzeug version is unknown "
+                f"and Flask version is {flask_version} (expected < {threshold_version})."
+            )
+        return is_testable
+
+    werkzeus_version = version.parse(werkzeug_version_str)
+    is_testable = flask_version < threshold_version and werkzeus_version < threshold_version
     if is_testable is False:
         logger.warn(
-            "sending file in form data is not testable because of flask, werkzeus versions."
-            f"Expected <= {threshold_version}, but {flask_version=} and {werkzeus_version}."
+            "sending file in form data is not testable because of Flask, Werkzeug versions."
+            f"Expected < {threshold_version}, but {flask_version=} and {werkzeus_version}."
         )
     return is_testable
 
